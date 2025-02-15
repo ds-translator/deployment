@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ds-translator.fullname" . }}-backend
+  labels:
+    app: {{ include "ds-translator.name" . }}-backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ds-translator.name" . }}-backend
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: {{ include "ds-translator.name" . }}-backend
+        component: backend
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          env:
+            {{- with .Values.env }}
+            {{- if kindIs "map" . }}
+            {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            {{- else if kindIs "slice" . }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}            

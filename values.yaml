@@ -1,0 +1,30 @@
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/load-balancer-attributes: >
+      access_logs.s3.enabled=true,access_logs.s3.bucket=dst-dev-alb-logs  
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ds-translator/frontend_ui
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: LoadBalancer
+    port: 80
+
+backend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ds-translator/backend-server/ds-translator_backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+
+
+nameOverride: ""
+fullnameOverride: ""
+env: {}
