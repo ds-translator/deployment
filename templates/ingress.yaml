@@ -6,6 +6,7 @@ metadata:
   annotations:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
+  ingressClassName: alb
   rules:
     - http:
         paths:
@@ -22,5 +23,5 @@ spec:
               service:
                 name: {{ include "ds-translator.fullname" $ }}-backend
                 port:
-                  number: 443              
+                  number: 8000              
 {{- end }}

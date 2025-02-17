@@ -1,9 +1,9 @@
 ingress:
   enabled: true
   annotations:
-    kubernetes.io/ingress.class: "alb"
-    alb.ingress.kubernetes.io/load-balancer-attributes: >
-      access_logs.s3.enabled=true,access_logs.s3.bucket=dst-dev-alb-logs  
+    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
 
 frontend:
   replicaCount: 1
@@ -12,7 +12,7 @@ frontend:
     tag: latest
     pullPolicy: IfNotPresent
   service:
-    type: LoadBalancer
+    type: ClusterIP
     port: 80
 
 backend:
@@ -23,7 +23,6 @@ backend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-
 
 nameOverride: ""
 fullnameOverride: ""
