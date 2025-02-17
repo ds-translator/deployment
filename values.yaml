@@ -1,0 +1,29 @@
+ingress:
+  enabled: true
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ds-translator/frontend_ui
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+
+backend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ds-translator/backend-server/ds-translator_backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+
+nameOverride: ""
+fullnameOverride: ""
+env: {}

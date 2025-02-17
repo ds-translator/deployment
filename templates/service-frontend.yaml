@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ds-translator.fullname" . }}-frontend
+  labels:
+    app: {{ include "ds-translator.name" . }}-frontend
+  annotations:
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:eu-central-1:170526064978:certificate/fdebd99c-0330-4508-b749-60d13525b587
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"    
+    # service.beta.kubernetes.io/aws-load-balancer-type: "nlb"  
+    # service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-0ceafdaaf6dce675e,subnet-01147f80acd38bb31"
+spec:
+  type: {{ .Values.frontend.service.type }}
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+    - port: 443
+      name: https
+      targetPort: 80      
+  selector:
+    app: {{ include "ds-translator.name" . }}-frontend

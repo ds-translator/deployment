@@ -1,0 +1,64 @@
+name: Deploy to Environment
+
+on:
+  push:
+    branches:
+      - main
+      - release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env:
+          - name: release
+            cluster_name: "dst-stage-eks-cluster"
+            aws_region: "eu-central-1"
+          - name: main
+            cluster_name: "dst-prod-eks-cluster"
+            aws_region: "eu-central-1"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Environment Variables
+        run: |
+          echo "ENVIRONMENT=${{ matrix.env.name }}" >> $GITHUB_ENV
+          echo "CLUSTER_NAME=${{ matrix.env.cluster_name }}" >> $GITHUB_ENV
+          echo "AWS_REGION=${{ matrix.env.aws_region }}" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update kubeconfig for EKS
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+
+      - name: Apply Custom ServiceAccount YAML
+        run: |
+          kubectl apply -f ./manifests/service-account.yaml
+
+      - name: Deploy AWS Load Balancer Controller via Helm
+        run: |
+          helm repo add eks https://aws.github.io/eks-charts
+          helm repo update
+          helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller \
+            --namespace kube-system \
+            --set clusterName=${{ env.CLUSTER_NAME }} \
+            --set serviceAccount.create=false \
+            --set serviceAccount.name=aws-load-balancer-controller \
+            --set aws-region=${{ env.AWS_REGION }}
+
+      - name: Deploy Local Release via Helm
+        run: |
+          helm upgrade --install dst-${{ env.ENVIRONMENT }} . \
+            --namespace default \
+            --set environment=${{ env.ENVIRONMENT }}
