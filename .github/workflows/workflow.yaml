@@ -26,7 +26,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Update kubeconfig for Dev
-        run: aws eks update-kubeconfig --region eu-east-1 --name dst-dev-cluster
+        run: aws eks update-kubeconfig --region us-east-1 --name dst-dev-cluster
 
       - name: Set up Helm
         uses: azure/setup-helm@v1
