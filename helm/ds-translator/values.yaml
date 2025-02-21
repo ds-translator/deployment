@@ -26,10 +26,10 @@ backend:
   service:
     type: ClusterIP
 
-frontend:
+health:
   replicaCount: 1
   image:
-    repository: nginx/nginx
+    repository: nginx
     tag: latest
     pullPolicy: IfNotPresent
   service:

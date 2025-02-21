@@ -60,6 +60,7 @@ jobs:
   deploy-dev:
     name: Deploy to Dev
     needs: test-chart
+    runs-on: ubuntu-latest    
     steps:
       - name: Deploy Helm Chart to Dev
         run: |
