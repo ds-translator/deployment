@@ -27,11 +27,11 @@ spec:
                   number: 8000     
     - http:
         paths:
-          path: /health
-          pathType: Prefix
-          backend:
-            service:
-              name: {{ include "ds-translator.fullname" $ }}-health
-              port:
-                name: http
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "ds-translator.fullname" $ }}-health
+                port:
+                  name: http
 {{- end }}
