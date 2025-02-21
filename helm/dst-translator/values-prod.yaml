@@ -1,0 +1,4 @@
+ingress:
+  host: dst-stage.pradikow.com
+  annotations:
+    alb.ingress.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:707809188586:certificate/59aa62ee-5672-4100-ba3b-4cd91035057f

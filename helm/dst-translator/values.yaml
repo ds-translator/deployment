@@ -1,9 +1,11 @@
 ingress:
+  host: dst-dev.pradikow.com
   enabled: true
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:iam::707809188586:server-certificate/dst-zerossl-dst-dev-pradikow-com
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
 
 frontend:
   replicaCount: 1

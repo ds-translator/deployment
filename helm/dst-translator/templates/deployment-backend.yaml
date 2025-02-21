@@ -23,6 +23,16 @@ spec:
           ports:
             - containerPort: 8000
           env:
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: openai-api-key
+                  key: OPENAI_API_KEY
+            - name: DEEPL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: deepl-api-key
+                  key: DEEPL_API_KEY                  
             {{- with .Values.env }}
             {{- if kindIs "map" . }}
             {{- range $key, $value := . }}
