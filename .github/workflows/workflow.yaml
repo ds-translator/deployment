@@ -60,6 +60,7 @@ jobs:
   deploy-dev:
     name: Deploy to Dev
     needs: test-chart
+    steps:
       - name: Deploy Helm Chart to Dev
         run: |
           helm upgrade --install dev-ds-translator ./helm/ds-translator \
