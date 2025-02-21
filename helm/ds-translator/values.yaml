@@ -26,6 +26,16 @@ backend:
   service:
     type: ClusterIP
 
+frontend:
+  replicaCount: 1
+  image:
+    repository: nginx/nginx
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80    
+
 nameOverride: ""
 fullnameOverride: ""
 env: {}
