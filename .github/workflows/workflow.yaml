@@ -38,11 +38,12 @@ jobs:
         run: helm template dev-ds-translator ./helm/ds-translator --namespace dev --values ./helm/ds-translator/values-dev.yaml
 
       - name: Dry-Run Install
-        run: helm upgrade --install dev-ds-translator ./helm/ds-translator \
-          --namespace dev \
-          --create-namespace \
-          --values ./helm/ds-translator/values-dev.yaml \
-          --dry-run
+        run: |
+          helm upgrade --install dev-ds-translator ./helm/ds-translator \
+            --namespace dev \
+            --create-namespace \
+            --values ./helm/ds-translator/values-dev.yaml \
+            --dry-run
 
       # - name: Create or Update API Key Secret in Dev
       #   run: |
