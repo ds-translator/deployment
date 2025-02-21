@@ -10,8 +10,8 @@ on:
       - develop
 
 jobs:
-  test-chart:
-    name: Test Helm Chart
+  deploy-dev:
+    name: Deploying to dev
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.set_tag.outputs.IMAGE_TAG }}
@@ -58,11 +58,8 @@ jobs:
       # - name: Determine Image Tag
       #   id: set_tag
       #   run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
-  deploy-dev:
-    name: Deploy to Dev
-    needs: test-chart
-    runs-on: ubuntu-latest    
-    steps:
+  
+
       - name: Deploy Helm Chart to Dev
         run: |
           helm upgrade --install dev-ds-translator ./helm/ds-translator \
