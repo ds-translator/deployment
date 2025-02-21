@@ -74,7 +74,7 @@ jobs:
       - name: Run Integration Tests on Dev
         run: |
           echo ">> Running basic connection test"
-          HOSTNAME=$(kubectl get ingress dev-dst-translator-dst-translator-ingress -n dev -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          HOSTNAME=$(kubectl get ingress dev-ds-translator-ds-translator-ingress -n dev -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
           echo "Ingress hostname: ${HOSTNAME}"
           curl --fail http://${HOSTNAME}/health || exit 1
           echo "Dev tests passed"
