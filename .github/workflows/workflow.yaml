@@ -132,7 +132,7 @@ jobs:
       id-token: write
       contents: read
 
-    environment: stage  # Requires manual approval via GitHub environment protection
+    # environment: stage  # Requires manual approval via GitHub environment protection
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
