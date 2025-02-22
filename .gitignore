@@ -2,3 +2,4 @@ backend-env.yaml
 dst-dev*
 certificate*/
 .DS_Store
+NOTES.md

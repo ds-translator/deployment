@@ -1,4 +1,4 @@
 ingress:
-  host: dst-dev.pradikow.com
+  host: dev.dstranslator.cloud
   annotations:
     alb.ingress.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:iam::707809188586:server-certificate/dst-zerossl-dst-dev-pradikow-com

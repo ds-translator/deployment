@@ -13,7 +13,7 @@ jobs:
   deploy-dev:
     env:
       FULL_DOMAIN: 'dev.dstranslator.cloud'
-        
+
     name: Deploying to dev
     runs-on: ubuntu-latest
     outputs:
@@ -84,7 +84,7 @@ jobs:
       - name: Prepare Change Batch File
         run: |
           # Replace placeholders in the template with the actual values.
-          sed -e "s/__ENVIRONMENT__/${FULL_DOMAIN}/g" \
+          sed -e "s/__ENVIRONMENT__/dev\./g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
         env:
@@ -93,7 +93,7 @@ jobs:
       - name: Run Integration Tests on Dev
         run: |
           echo ">> Running basic connection test"
-          curl --fail http://${FULL_DOMAIN} || exit 1
+          curl --fail http://dev.dstranslator.cloud || exit 1
           echo "Dev tests passed"
 
   package-artifact:

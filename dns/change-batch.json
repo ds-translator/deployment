@@ -4,12 +4,12 @@
       {
         "Action": "UPSERT",
         "ResourceRecordSet": {
-          "Name": "dev.dstranslator.cloud",
+          "Name": "__ENVIRONMENT__dstranslator.cloud",
           "Type": "CNAME",
           "TTL": 60,
           "ResourceRecords": [
             {
-              "Value": "example.com"
+              "Value": "__TARGET__"
             }
           ]
         }
