@@ -1,0 +1,19 @@
+{
+    "Comment": "Update CNAME record for dstranslator.cloud",
+    "Changes": [
+      {
+        "Action": "UPSERT",
+        "ResourceRecordSet": {
+          "Name": "dev.dstranslator.cloud",
+          "Type": "CNAME",
+          "TTL": 60,
+          "ResourceRecords": [
+            {
+              "Value": "example.com"
+            }
+          ]
+        }
+      }
+    ]
+  }
+  

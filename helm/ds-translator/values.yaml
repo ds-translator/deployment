@@ -1,8 +1,6 @@
 ingress:
-  host: dst-dev.pradikow.com
   enabled: true
   annotations:
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:iam::707809188586:server-certificate/dst-zerossl-dst-dev-pradikow-com
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
@@ -26,15 +24,6 @@ backend:
   service:
     type: ClusterIP
 
-health:
-  replicaCount: 1
-  image:
-    repository: nginx
-    tag: latest
-    pullPolicy: IfNotPresent
-  service:
-    type: ClusterIP
-    port: 80    
 
 nameOverride: ""
 fullnameOverride: ""

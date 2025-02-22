@@ -11,6 +11,9 @@ on:
 
 jobs:
   deploy-dev:
+    env:
+      FULL_DOMAIN: 'dev.dstranslator.cloud'
+        
     name: Deploying to dev
     runs-on: ubuntu-latest
     outputs:
@@ -71,14 +74,27 @@ jobs:
       - name: Wait for Deployment to Stabilize
         run: sleep 15
 
-      - name: Run Integration Tests on Dev
+      - name: Setting new DNS for domain
         run: |
           echo ">> Running basic connection test"
           HOSTNAME=$(kubectl get ingress dev-ds-translator-ds-translator-ingress -n dev -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
           echo "Ingress hostname: ${HOSTNAME}"
-          curl --fail http://${HOSTNAME}/health || exit 1
-          echo "Dev tests passed"
+          echo "::set-output name=hostname::${HOSTNAME}"
 
+      - name: Prepare Change Batch File
+        run: |
+          # Replace placeholders in the template with the actual values.
+          sed -e "s/__ENVIRONMENT__/${FULL_DOMAIN}/g" \
+              -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
+              dns/change-batch.json > change-batch-temp.json
+        env:
+          FULL_DOMAIN: 'dev.dstranslator.cloud'
+
+      - name: Run Integration Tests on Dev
+        run: |
+          echo ">> Running basic connection test"
+          curl --fail http://${FULL_DOMAIN} || exit 1
+          echo "Dev tests passed"
 
   package-artifact:
     name: Package Helm Chart Artifact
@@ -92,7 +108,7 @@ jobs:
         uses: azure/setup-helm@v1
 
       - name: Package Helm Chart
-        run: helm package ./helm/myapp --version ${GITHUB_SHA} --destination packaged-charts
+        run: helm package ./helm/ds-translator --version ${GITHUB_SHA} --destination packaged-charts
 
       - name: Upload Helm Chart Artifact
         uses: actions/upload-artifact@v3
@@ -116,7 +132,7 @@ jobs:
             --namespace dev --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Configure AWS Credentials for Stage
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v3
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/dst-stage-github-infrastructure-role
           aws-region: ${{ secrets.AWS_REGION }}
@@ -134,7 +150,7 @@ jobs:
 
       - name: Deploy Helm Chart to Stage
         run: |
-          helm upgrade --install myapp-stage ./packaged-charts/*.tgz \
+          helm upgrade --install dst-stage ./packaged-charts/*.tgz \
             --namespace stage \
             --create-namespace \
             --values helm/values-stage.yaml \
