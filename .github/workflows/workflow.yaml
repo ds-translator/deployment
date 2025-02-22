@@ -138,11 +138,11 @@ jobs:
       #       --from-literal=OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
       #       --namespace dev --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Configure AWS Credentials for Dev
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::707809188586:role/dst-dev-github-deployment-role
-          aws-region: us-east-1
+      # - name: Configure AWS Credentials for Dev
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     role-to-assume: arn:aws:iam::707809188586:role/dst-dev-github-deployment-role
+      #     aws-region: us-east-1
 
       - name: Update kubeconfig for Stage
         run: aws eks update-kubeconfig --region us-east-1 --name dst-stage-cluster
