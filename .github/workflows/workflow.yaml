@@ -156,7 +156,7 @@ jobs:
 
       - name: Deploy Helm Chart to Stage
         run: |
-          helm upgrade --install stage-ds-translator ./packaged-charts/*.tgz \
+          helm upgrade --install stage-ds-translator ./helm-chart/*.tgz \
             --namespace stage \
             --create-namespace \
             --values helm/values-stage.yaml
