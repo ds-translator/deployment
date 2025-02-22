@@ -127,6 +127,11 @@ jobs:
     name: Promote to Stage
     needs: package-artifact
     runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
     environment: stage  # Requires manual approval via GitHub environment protection
     steps:
       - name: Checkout Repository
