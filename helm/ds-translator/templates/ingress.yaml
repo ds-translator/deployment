@@ -7,6 +7,10 @@ metadata:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   ingressClassName: alb
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: placeholder-tls-secret  
   rules:
     - host: {{ .Values.ingress.host }}
       http:
