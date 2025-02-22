@@ -72,7 +72,7 @@ jobs:
       # --set image.tag=${{ env.IMAGE_TAG }}
 
       - name: Wait for Deployment to Stabilize
-        run: sleep 15
+        run: sleep 10
 
       - name: Setting new DNS for domain
         run: |
@@ -87,14 +87,18 @@ jobs:
           sed -e "s/__ENVIRONMENT__/dev\./g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
+          cat change-batch-temp.json 
         env:
           FULL_DOMAIN: 'dev.dstranslator.cloud'
+
+      - name: Wait for DNS changes
+        run: sleep 10
 
       - name: Run Integration Tests on Dev
         run: |
           echo ">> Running basic connection test"
           curl --fail http://dev.dstranslator.cloud || exit 1
-          echo "Dev tests passed"
+          echo "Domain and website can be reached"
 
   package-artifact:
     name: Package Helm Chart Artifact
