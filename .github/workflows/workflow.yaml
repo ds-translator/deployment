@@ -145,13 +145,13 @@ jobs:
         run: |
           TAG=$(git describe --tags --abbrev=0)
           # helm package ./helm/ds-translator --version ${TAG}+${GITHUB_SHA} --destination packaged-charts
-          helm package ./helm/ds-translator --destination packaged-charts
+          helm package ./helm/ds-translator 
 
       - name: Upload Helm Chart Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ds-translator.tgz
-          path: packaged-charts/*.tgz
+          name: ds-translator-chart
+          path: ds-translator.tgz
 
   promote-to-stage:
     name: Promote to Stage
@@ -178,7 +178,7 @@ jobs:
       - name: Download Helm Chart Artifact
         uses: actions/download-artifact@v4
         with:
-          name: deployment/ds-translator.tgz
+          name: ds-translator-chart
 
       - name: Display structure of downloaded files
         run: ls -R
