@@ -337,7 +337,7 @@ jobs:
       - name: Apply DNS Changes
         run: |
           # Replace placeholders in the template with the actual values.
-          sed -e "s/__ENVIRONMENT__//g" \
+          sed -e "s/__ENVIRONMENT__/www\./g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
           cat change-batch-temp.json 
@@ -361,5 +361,5 @@ jobs:
       - name: Run Integration Tests on Production
         run: |
           echo ">> Running basic connection test"
-          curl --fail https://dstranslator.cloud || exit 1
+          curl --fail https://www.dstranslator.cloud || exit 1
           echo "Domain and website can be reached"
