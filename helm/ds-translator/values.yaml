@@ -17,7 +17,7 @@ frontend:
     type: ClusterIP
     port: 80
   nodeSelector:
-    nodegroup: frontend
+    nodegroup: dst-dev-eks-ng-frontend
 
 backend:
   replicaCount: 1
@@ -28,7 +28,10 @@ backend:
   service:
     type: ClusterIP
   nodeSelector:
-    nodegroup: frontend
+    nodegroup: dst-dev-eks-ng-frontend
+  env:
+    STT_OPENAI_API_URL: "http://stt/v1"
+    WHISPER_MODEL: "whisper-1"    
 
 stt:
   replicaCount: 1
@@ -40,7 +43,7 @@ stt:
     type: ClusterIP   
     port: 8000 
   nodeSelector:
-    nodegroup: gpu
+    nodegroup: dst-dev-eks-ng-gpu
 
 nameOverride: ""
 fullnameOverride: ""
