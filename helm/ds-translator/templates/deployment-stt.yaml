@@ -5,7 +5,7 @@ metadata:
   labels:
     app: {{ include "ds-translator.name" . }}-stt
 spec:
-  replicas: {{ .Values.frontend.replicaCount }}
+  replicas: {{ .Values.stt.replicaCount }}
   selector:
     matchLabels:
       app: {{ include "ds-translator.name" . }}-stt
@@ -18,7 +18,7 @@ spec:
         {{- toYaml .Values.stt.nodeSelector | nindent 8 }}       
       containers:
         - name: stt
-          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
-          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          image: "{{ .Values.stt.image.repository }}:{{ .Values.stt.image.tag }}"
+          imagePullPolicy: {{ .Values.stt.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.frontend.service.port }}
+            - containerPort: {{ .Values.stt.service.port }}

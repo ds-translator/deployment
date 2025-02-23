@@ -37,7 +37,8 @@ stt:
     tag: 0.7-cpu
     pullPolicy: IfNotPresent
   service:
-    type: ClusterIP    
+    type: ClusterIP   
+    port: 8000 
   nodeSelector:
     nodegroup: gpu
 
