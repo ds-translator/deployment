@@ -16,6 +16,8 @@ spec:
         app: {{ include "ds-translator.name" . }}-backend
         component: backend
     spec:
+      nodeSelector:
+        {{- toYaml .Values.backend.nodeSelector | nindent 8 }}    
       containers:
         - name: backend
           image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"

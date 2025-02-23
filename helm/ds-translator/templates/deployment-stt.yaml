@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ds-translator.fullname" . }}-frontend
+  name: {{ include "ds-translator.fullname" . }}-stt
   labels:
-    app: {{ include "ds-translator.name" . }}-frontend
+    app: {{ include "ds-translator.name" . }}-stt
 spec:
   replicas: {{ .Values.frontend.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "ds-translator.name" . }}-frontend
+      app: {{ include "ds-translator.name" . }}-stt
   template:
     metadata:
       labels:
-        app: {{ include "ds-translator.name" . }}-frontend
+        app: {{ include "ds-translator.name" . }}-stt
     spec:
       nodeSelector:
-        {{- toYaml .Values.frontend.nodeSelector | nindent 8 }}       
+        {{- toYaml .Values.stt.nodeSelector | nindent 8 }}       
       containers:
-        - name: frontend
+        - name: stt
           image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
           imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
