@@ -153,6 +153,9 @@ jobs:
           name: ds-translator-chart
           path: ds-translator.tgz
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
   promote-to-stage:
     name: Promote to Stage
     needs: package-artifact
