@@ -1,4 +1,4 @@
-name: CI/CD Helm Chart Promotion Pipeline
+name: CI/CD Deployment to Production Cluster
 
 permissions:
   id-token: write
