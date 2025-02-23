@@ -125,7 +125,7 @@ jobs:
       - name: Run Integration Tests on Dev
         run: |
           echo ">> Running basic connection test"
-          curl --fail http://dev.dstranslator.cloud || exit 1
+          curl --fail https://dev.dstranslator.cloud || exit 1
           echo "Domain and website can be reached"
 
   package-artifact:
@@ -257,7 +257,7 @@ jobs:
       - name: Run Integration Tests on Stage
         run: |
           echo ">> Running basic connection test"
-          curl --fail http://stage.dstranslator.cloud || exit 1
+          curl --fail https://stage.dstranslator.cloud || exit 1
           echo "Domain and website can be reached"
 
   promote-to-prod:
