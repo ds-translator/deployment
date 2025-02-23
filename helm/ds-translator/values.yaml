@@ -27,7 +27,7 @@ backend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
-      nodeSelector:
+  nodeSelector:
     nodegroup: frontend
 
 stt:
