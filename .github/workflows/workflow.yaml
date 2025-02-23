@@ -191,7 +191,7 @@ jobs:
           helm upgrade --install stage-ds-translator ds-translator-*.tgz \
             --namespace stage \
             --create-namespace \
-            --values helm/values-stage.yaml
+            --values helm/ds-translator/values-stage.yaml
       # --set image.tag=${{ env.IMAGE_TAG }}
 
       - name: Create or Update API Key Secret in Stage
