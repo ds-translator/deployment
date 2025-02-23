@@ -102,15 +102,18 @@ jobs:
           # Set the output for subsequent steps
           echo "::set-output name=hostname::${HOSTNAME}"
 
-      - name: Prepare Change Batch File
+      - name: Apply DNS Changes
         run: |
           # Replace placeholders in the template with the actual values.
           sed -e "s/__ENVIRONMENT__/dev\./g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
           cat change-batch-temp.json 
-        env:
-          FULL_DOMAIN: 'dev.dstranslator.cloud'
+
+          echo "Applying DNS changes..."
+          aws route53 change-resource-record-sets \
+            --hosted-zone-id ${{ secrets.AWS_HOSTED_ZONE_ID }} \
+            --change-batch file://change-batch-temp.json
 
       - name: Wait for DNS changes
         run: sleep 10
@@ -202,21 +205,25 @@ jobs:
         run: sleep 10
 
       - name: Setting new DNS for domain
+        id: get-hostname
         run: |
           echo ">> Running basic connection test"
           HOSTNAME=$(kubectl get ingress stage-ds-translator-ds-translator-ingress -n dev -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
           echo "Ingress hostname: ${HOSTNAME}"
           echo "::set-output name=hostname::${HOSTNAME}"
 
-      - name: Prepare Change Batch File
+      - name: Apply DNS Changes
         run: |
           # Replace placeholders in the template with the actual values.
           sed -e "s/__ENVIRONMENT__/stage\./g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
           cat change-batch-temp.json 
-        env:
-          FULL_DOMAIN: 'stage.dstranslator.cloud'
+
+          echo "Applying DNS changes..."
+          aws route53 change-resource-record-sets \
+            --hosted-zone-id ${{ secrets.AWS_HOSTED_ZONE_ID }} \
+            --change-batch file://change-batch-temp.json
 
       - name: Wait for DNS changes
         run: sleep 10
