@@ -23,7 +23,7 @@ backend:
   replicaCount: 1
   image:
     repository: ghcr.io/ds-translator/backend-server/ds-translator_backend
-    tag: latest
+    tag: v0.2.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -31,7 +31,7 @@ backend:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
   env:
     STT_OPENAI_API_URL: "http://stt/v1"
-    WHISPER_MODEL: "whisper-1"    
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"    
 
 stt:
   replicaCount: 1
