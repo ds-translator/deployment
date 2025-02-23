@@ -337,7 +337,7 @@ jobs:
       - name: Apply DNS Changes
         run: |
           # Replace placeholders in the template with the actual values.
-          sed -e "s/__ENVIRONMENT__/prod\./g" \
+          sed -e "s/__ENVIRONMENT__\.//g" \
               -e "s/__TARGET__/${{ steps.get-hostname.outputs.hostname }}/g" \
               dns/change-batch.json > change-batch-temp.json
           cat change-batch-temp.json 
