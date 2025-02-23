@@ -204,15 +204,30 @@ jobs:
           --from-literal=DEEPL_API_KEY=${{ secrets.DEEPL_API_KEY }} \
           --namespace stage --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Wait for Deployment to Stabilize
-        run: sleep 10
-
       - name: Setting new DNS for domain
         id: get-hostname
         run: |
-          echo ">> Running basic connection test"
-          HOSTNAME=$(kubectl get ingress stage-ds-translator-ds-translator-ingress -n dev -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-          echo "Ingress hostname: ${HOSTNAME}"
+          echo ">> Waiting for public DNS endpoint"
+          RETRIES=10
+          attempt=1
+
+          while [ $attempt -le $RETRIES ]; do
+            HOSTNAME=$(kubectl get ingress stage-ds-translator-ds-translator-ingress -n stage -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            if [ -n "$HOSTNAME" ]; then
+              echo "Ingress hostname found: ${HOSTNAME}"
+              break
+            fi
+            echo "Attempt ${attempt}: Hostname is empty. Waiting for 5 seconds..."
+            sleep 5
+            attempt=$((attempt + 1))
+          done
+
+          if [ -z "$HOSTNAME" ]; then
+            echo "The cluster has no public DNS endpoint (retries: ${RETRIES})."
+            exit 1
+          fi
+
+          # Set the output for subsequent steps
           echo "::set-output name=hostname::${HOSTNAME}"
 
       - name: Apply DNS Changes
