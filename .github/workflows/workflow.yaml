@@ -108,7 +108,7 @@ jobs:
 
           echo "Applying DNS changes..."
           CHANGE_ID=$(aws route53 change-resource-record-sets \
-            --hosted-zone-id ${{ secrets.HOSTED_ZONE_ID }} \
+            --hosted-zone-id ${{ secrets.AWS_HOSTED_ZONE_ID }} \
             --change-batch file://change-batch-temp.json \
             --query 'ChangeInfo.Id' --output text)
           echo "Change submitted. Change ID: ${CHANGE_ID}"
@@ -222,7 +222,7 @@ jobs:
 
           echo "Applying DNS changes..."
           CHANGE_ID=$(aws route53 change-resource-record-sets \
-            --hosted-zone-id ${{ secrets.HOSTED_ZONE_ID }} \
+            --hosted-zone-id ${{ secrets.AWS_HOSTED_ZONE_ID }} \
             --change-batch file://change-batch-temp.json \
             --query 'ChangeInfo.Id' --output text)
           echo "Change submitted. Change ID: ${CHANGE_ID}"
