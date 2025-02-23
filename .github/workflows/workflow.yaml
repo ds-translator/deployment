@@ -273,7 +273,7 @@ jobs:
       - name: Configure AWS Credentials for Production
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ SECRETS.AWS_ACCOUNT_ID }}:role/dst-prod-github-deployment-role
+          role-to-assume: arn:aws:iam::${{ SECRETS.AWS_ACCOUNT_ID }}:role/dst-stage-github-deployment-role
           aws-region: ${{ SECRETS.AWS_REGION }}
 
       - name: Update kubeconfig for Production
