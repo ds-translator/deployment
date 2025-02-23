@@ -1,5 +1,5 @@
 ingress:
-  host: dstranslator.cloud
+  host: www.dstranslator.cloud
   enabled: true
   annotations:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:iam::707809188586:server-certificate/dst-zerossl-dstranslator-cloud

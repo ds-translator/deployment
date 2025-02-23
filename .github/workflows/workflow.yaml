@@ -14,7 +14,7 @@ jobs:
     env:
       FULL_DOMAIN: 'dev.dstranslator.cloud'
 
-    name: Deploying to dev
+    name: Deploying to Dev
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.set_tag.outputs.IMAGE_TAG }}
