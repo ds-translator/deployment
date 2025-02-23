@@ -33,8 +33,8 @@ backend:
 stt:
   replicaCount: 1
   image:
-    repository: ghcr.io/speaches-ai/speaches:0.7-cpu
-    tag: latest
+    repository: ghcr.io/speaches-ai/speaches
+    tag: 0.7-cpu
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP    
