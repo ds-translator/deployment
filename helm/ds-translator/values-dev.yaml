@@ -8,10 +8,13 @@ ingress:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
 
 backend:
+backend:
+  image:
+    pullPolicy: Always
   env:
     STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
     TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
     SPEECH_TO_TEXT_ENGINE: "whisper_stt"
     TEXT_TO_SPEECH_ENGINE: "kokoro"
     TRANSLATOR_ENGINE: "deepl"
-    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"  
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"
