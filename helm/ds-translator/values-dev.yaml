@@ -9,5 +9,9 @@ ingress:
 
 backend:
   env:
-    STT_OPENAI_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
-    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"    
+    STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
+    TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
+    SPEECH_TO_TEXT_ENGINE: "whisper_stt"
+    TEXT_TO_SPEECH_ENGINE: "kokoro"
+    TRANSLATOR_ENGINE: "deepl"
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"  
