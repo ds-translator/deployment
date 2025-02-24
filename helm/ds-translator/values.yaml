@@ -27,6 +27,7 @@ backend:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
+    port: 8000
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
   env:
@@ -41,7 +42,8 @@ stt:
     tag: 0.7-cpu
     pullPolicy: IfNotPresent
   service:
-    type: ClusterIP   
+    type: ClusterIP
+    port: 8000
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
 
@@ -52,7 +54,8 @@ tts:
     tag: v0.2.2
     pullPolicy: IfNotPresent
   service:
-    type: ClusterIP   
+    type: ClusterIP
+    port: 8880
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
 
