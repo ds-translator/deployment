@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ds-translator.fullname" . }}-tts
+  labels:
+    app: {{ include "ds-translator.name" . }}-tts
+spec:
+  replicas: {{ .Values.tts.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ds-translator.name" . }}-tts
+  template:
+    metadata:
+      labels:
+        app: {{ include "ds-translator.name" . }}-tts
+    spec:
+      nodeSelector:
+        {{- toYaml .Values.tts.nodeSelector | nindent 8 }}       
+      containers:
+        - name: tts
+          image: "{{ .Values.tts.image.repository }}:{{ .Values.tts.image.tag }}"
+          imagePullPolicy: {{ .Values.tts.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.tts.service.port }}

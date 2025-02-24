@@ -1,0 +1,4 @@
+backend:
+  env:
+    STT_OPENAI_API_URL: "http://prod-ds-translator-ds-translator-stt:8000/v1"
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"

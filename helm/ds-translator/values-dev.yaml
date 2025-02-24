@@ -7,3 +7,7 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
 
+backend:
+  env:
+    STT_OPENAI_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"    

@@ -23,14 +23,15 @@ backend:
   replicaCount: 1
   image:
     repository: ghcr.io/ds-translator/backend-server
-    tag: v0.2.0
-    pullPolicy: Always
+    tag: v0.3.0
+    pullPolicy: IfNotPresent
   service:
     type: ClusterIP
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
   env:
-    STT_OPENAI_API_URL: "http://stt/v1"
+    STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
+    TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
     WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"    
 
 stt:
@@ -41,7 +42,17 @@ stt:
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP   
-    port: 8000 
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+
+tts:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/remsky/kokoro-fastapi-cpu
+    tag: v0.2.2
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP   
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
 
