@@ -45,14 +45,6 @@ jobs:
       - name: Render Templates (Helm Template)
         run: helm template dev-ds-translator ./helm/ds-translator --namespace dev --values ./helm/ds-translator/values-dev.yaml
 
-      - name: Dry-Run Install
-        run: |
-          helm upgrade --install dev-ds-translator ./helm/ds-translator \
-            --namespace dev \
-            --create-namespace \
-            --values ./helm/ds-translator/values-dev.yaml \
-            --dry-run
-
       - name: Install Karpenter controller in Dev
         run: |      
           helm repo add karpenter https://charts.karpenter.sh
@@ -64,6 +56,14 @@ jobs:
             --set clusterEndpoint=$cluster_endpoint \
             --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::${{ SECRETS.AWS_ACCOUNT_ID }}:role/dst-dev-karpenter-controller-role
           kubectl taint nodes -l NodeGroup=karpenter karpenter=true:NoSchedule
+
+      - name: Dry-Run Install
+        run: |
+          helm upgrade --install dev-ds-translator ./helm/ds-translator \
+            --namespace dev \
+            --create-namespace \
+            --values ./helm/ds-translator/values-dev.yaml \
+            --dry-run
 
       # - name: Determine Image Tag
       #   id: set_tag
