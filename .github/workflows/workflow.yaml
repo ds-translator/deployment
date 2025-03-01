@@ -9,8 +9,13 @@ on:
     branches:
       - develop
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy-dev:
+    if: github.ref == 'refs/heads/develop'  
     env:
       FULL_DOMAIN: 'dev.dstranslator.cloud'
 
@@ -139,8 +144,9 @@ jobs:
           echo "Domain and website can be reached"
 
   package-artifact:
+    if: github.ref == 'refs/heads/release'  
     name: Package Helm Chart Artifact
-    needs: deploy-dev
+    # needs: deploy-dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -167,6 +173,7 @@ jobs:
         run: ls -R
 
   promote-to-stage:
+    if: github.ref == 'refs/heads/release'  
     name: Promote to Stage
     needs: package-artifact
     runs-on: ubuntu-latest
@@ -282,11 +289,13 @@ jobs:
           echo "Domain and website can be reached"
 
   promote-to-prod:
+    if: github.ref == 'refs/heads/release'
     name: Promote to Production
     needs: promote-to-stage
     runs-on: ubuntu-latest
 
     # environment: prod  # Requires manual approval via GitHub environment protection
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
