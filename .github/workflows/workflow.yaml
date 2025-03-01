@@ -40,7 +40,7 @@ jobs:
         uses: azure/setup-helm@v4.3.0
 
       - name: Helm Lint
-        run: helm lint ./helm/ds-translator
+        run: helm lint ./helm/ds-translator -f helm/ds-translator/values-dev.yaml
 
       - name: Render Templates (Helm Template)
         run: helm template dev-ds-translator ./helm/ds-translator --namespace dev --values ./helm/ds-translator/values-dev.yaml
@@ -166,6 +166,9 @@ jobs:
 
       - name: Set up Helm
         uses: azure/setup-helm@v4.3.0
+
+      - name: Helm Lint
+        run: helm lint ./helm/ds-translator -f helm/ds-translator/values-stage.yaml
 
       - name: Package Helm Chart
         run: |
