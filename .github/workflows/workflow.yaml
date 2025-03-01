@@ -58,7 +58,7 @@ jobs:
           helm repo add karpenter https://charts.karpenter.sh
           helm repo update
           cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-          helm install --upgrade karpenter karpenter/karpenter \
+          helm upgrade --install karpenter karpenter/karpenter \
             --namespace karpenter --create-namespace \
             --set clusterName=dst-dev-cluster \
             --set clusterEndpoint=$cluster_endpoint \
