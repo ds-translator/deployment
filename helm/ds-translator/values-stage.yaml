@@ -14,4 +14,4 @@ backend:
     SPEECH_TO_TEXT_ENGINE: "whisper_stt"
     TEXT_TO_SPEECH_ENGINE: "kokoro"
     TRANSLATOR_ENGINE: "deepl"
-    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"  
+    WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"

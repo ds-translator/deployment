@@ -52,7 +52,17 @@ jobs:
       # - name: Determine Image Tag
       #   id: set_tag
       #   run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
-  
+
+      # installed in terraform with module
+      # - name: Install AWS Observability in Dev
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-dev-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
 
       - name: Deploy Helm Chart to Dev
         run: |
@@ -186,6 +196,17 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
+      # installed with terraform as module
+      # - name: Install AWS Observability in Stage
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-stage-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
+
       - name: Deploy Helm Chart to Stage
         run: |
           helm upgrade --install stage-ds-translator ds-translator-*.tgz \
@@ -289,6 +310,17 @@ jobs:
 
       - name: Display structure of downloaded files
         run: ls -R
+
+      #  installed in terraform with module
+      # - name: Install AWS Observability in Production
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-production-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
 
       - name: Deploy Helm Chart to Production
         run: |
