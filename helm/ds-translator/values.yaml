@@ -17,7 +17,8 @@ frontend:
     type: ClusterIP
     port: 80
   nodeSelector:
-    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+    provisioner: frontend
+    # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
 
 backend:
   replicaCount: 1
@@ -29,7 +30,8 @@ backend:
     type: ClusterIP
     port: 8000
   nodeSelector:
-    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+    provisioner: frontend
+    # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
   
 
 stt:
@@ -42,7 +44,7 @@ stt:
     type: ClusterIP
     port: 8000
   nodeSelector:
-    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+    provisioner: gpu
 
 tts:
   replicaCount: 1
@@ -54,7 +56,8 @@ tts:
     type: ClusterIP
     port: 8880
   nodeSelector:
-    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+    provisioner: gpu
+
 
 nameOverride: ""
 fullnameOverride: ""
