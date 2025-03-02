@@ -73,9 +73,10 @@ jobs:
         run: |      
           helm repo add aws-observability https://aws-observability.github.io/helm-charts
           helm repo update aws-observability
-          helm install --create-namespace \
-            --namespace amazon-cloudwatch \ 
-            amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+          helm install amazon-cloudwatch-observability aws-observability/amazon-cloudwatch-observability \
+            --wait \
+            --create-namespace \
+            --namespace amazon-cloudwatch \
             --set clusterName=dst-dev-cluster \
             --set region=${{ SECRETS.AWS_REGION }}
 
