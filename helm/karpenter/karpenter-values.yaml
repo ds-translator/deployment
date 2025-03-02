@@ -1,4 +1,4 @@
-controller:
+controllerManager:
   tolerations:
     - key: "dedicated"
       operator: "Equal"
