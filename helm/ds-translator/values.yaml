@@ -17,10 +17,7 @@ frontend:
     type: ClusterIP
     port: 80
   nodeSelector:
-    provisioner: frontend
-  annotations:
-    karpenter.sh/provisioner-name: dev-ds-translator-frontend
-    # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
 
 backend:
   replicaCount: 1
@@ -32,10 +29,7 @@ backend:
     type: ClusterIP
     port: 8000
   nodeSelector:
-    provisioner: frontend
-  annotations:
-    karpenter.sh/provisioner-name: dev-ds-translator-frontend    
-    # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
   env: {}
 
 stt:
@@ -48,9 +42,7 @@ stt:
     type: ClusterIP
     port: 8000
   nodeSelector:
-    provisioner: gpu
-  annotations:
-    karpenter.sh/provisioner-name: dev-ds-translator-gpu    
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
 
 tts:
   replicaCount: 1
@@ -62,10 +54,7 @@ tts:
     type: ClusterIP
     port: 8880
   nodeSelector:
-    provisioner: gpu
-  annotations:
-    karpenter.sh/provisioner-name: dev-ds-translator-gpu    
-
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
 
 nameOverride: ""
 fullnameOverride: ""

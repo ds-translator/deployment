@@ -9,31 +9,9 @@ ingress:
 
 backend:
   env:
-    STT_API_URL: "http://stage-ds-translator-ds-translator-stt/v1"
-    TTS_API_URL: "http://stage-ds-translator-ds-translator-tts/v1"
+    STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
+    TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
     SPEECH_TO_TEXT_ENGINE: "whisper_stt"
     TEXT_TO_SPEECH_ENGINE: "kokoro"
     TRANSLATOR_ENGINE: "deepl"
     WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"
-
-frontendProvisioner:
-  limits:
-    cpu: "1000"
-    memory: "2048Mi"
-  provider:
-    instanceProfile: "dst-stage-karpenter-profile-instance-role"
-  requirements:
-    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]    
-
-provisionerGpu:
-  labels:
-    provisioner: "gpu"
-  limits:
-    cpu: "1000"
-    memory: "2048Mi"
-  provider:
-    instanceProfile: "dst-dev-karpenter-profile-instance-role"
-  requirements:
-    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]
-
-clusterName: "dst-stage-cluster"

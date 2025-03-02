@@ -40,27 +40,10 @@ jobs:
         uses: azure/setup-helm@v4.3.0
 
       - name: Helm Lint
-        run: helm lint ./helm/ds-translator -f helm/ds-translator/values-dev.yaml
+        run: helm lint ./helm/ds-translator
 
       - name: Render Templates (Helm Template)
         run: helm template dev-ds-translator ./helm/ds-translator --namespace dev --values ./helm/ds-translator/values-dev.yaml
-
-      - name: Install Karpenter controller in Dev
-        run: |      
-          helm repo add karpenter https://charts.karpenter.sh
-          helm repo update
-          cluster_endpoint=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
-
-          helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter \
-            --version "1.2.2" \
-            --namespace "kube-system" \
-            --create-namespace \
-            --set "settings.clusterName=dst-dev-cluster" \
-            --set "settings.cluster-endpoint=$cluster_endpoint" \
-            --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::${{ SECRETS.AWS_ACCOUNT_ID }}:role/dst-dev-karpenter-controller-role \
-            -f ./helm/karpenter/karpenter-values.yaml
-
-          kubectl taint nodes -l NodeGroup=karpenter karpenter=true:NoSchedule
 
       - name: Dry-Run Install
         run: |
@@ -70,20 +53,21 @@ jobs:
             --values ./helm/ds-translator/values-dev.yaml \
             --dry-run
 
+
       # - name: Determine Image Tag
       #   id: set_tag
       #   run: echo "IMAGE_TAG=${GITHUB_SHA}" >> $GITHUB_ENV
 
-      - name: Install AWS Observability in Dev
-        run: |      
-          helm repo add aws-observability https://aws-observability.github.io/helm-charts
-          helm repo update aws-observability
-          helm upgrade --install amazon-cloudwatch-observability aws-observability/amazon-cloudwatch-observability \
-            --create-namespace \
-            --namespace amazon-cloudwatch \
-            --set clusterName=dst-dev-cluster \
-            --set region=${{ SECRETS.AWS_REGION }} \
-            -f ./helm/aws-cloudwatch/aws-cloudwatch-values.yaml
+      # installed in terraform with module
+      # - name: Install AWS Observability in Dev
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-dev-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
 
       - name: Deploy Helm Chart to Dev
         run: |
@@ -173,9 +157,6 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v4.3.0
 
-      - name: Helm Lint
-        run: helm lint ./helm/ds-translator -f helm/ds-translator/values-stage.yaml
-
       - name: Package Helm Chart
         run: |
           TAG=$(git describe --tags --abbrev=0)
@@ -222,15 +203,16 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - name: Install AWS Observability in Stage
-        run: |      
-          helm repo add aws-observability https://aws-observability.github.io/helm-charts
-          helm repo update aws-observability
-          helm install --wait --create-namespace \
-            --namespace amazon-cloudwatch \ 
-            amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
-            --set clusterName=dst-stage-cluster \
-            --set region=${{ SECRETS.AWS_REGION }}
+      # installed with terraform as module
+      # - name: Install AWS Observability in Stage
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-stage-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
 
       - name: Deploy Helm Chart to Stage
         run: |
@@ -338,15 +320,16 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      - name: Install AWS Observability in Production
-        run: |      
-          helm repo add aws-observability https://aws-observability.github.io/helm-charts
-          helm repo update aws-observability
-          helm install --wait --create-namespace \
-            --namespace amazon-cloudwatch \ 
-            amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
-            --set clusterName=dst-production-cluster \
-            --set region=${{ SECRETS.AWS_REGION }}
+      #  installed in terraform with module
+      # - name: Install AWS Observability in Production
+      #   run: |      
+      #     helm repo add aws-observability https://aws-observability.github.io/helm-charts
+      #     helm repo update aws-observability
+      #     helm install --wait --create-namespace \
+      #       --namespace amazon-cloudwatch \ 
+      #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
+      #       --set clusterName=dst-production-cluster \
+      #       --set region=${{ SECRETS.AWS_REGION }}
 
       - name: Deploy Helm Chart to Production
         run: |
