@@ -1,0 +1,10 @@
+controllerManager:
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: "alb"
+      effect: "NoSchedule"
+    - key: "dedicated"
+      operator: "Equal"
+      value: "karpenter"
+      effect: "NoSchedule"
