@@ -18,6 +18,8 @@ frontend:
     port: 80
   nodeSelector:
     provisioner: frontend
+  annotations:
+    karpenter.sh/provisioner-name: dev-ds-translator-frontend
     # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
 
 backend:
@@ -31,8 +33,10 @@ backend:
     port: 8000
   nodeSelector:
     provisioner: frontend
+  annotations:
+    karpenter.sh/provisioner-name: dev-ds-translator-frontend    
     # eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
-  
+  env: {}
 
 stt:
   replicaCount: 1
@@ -45,6 +49,8 @@ stt:
     port: 8000
   nodeSelector:
     provisioner: gpu
+  annotations:
+    karpenter.sh/provisioner-name: dev-ds-translator-gpu    
 
 tts:
   replicaCount: 1
@@ -57,6 +63,8 @@ tts:
     port: 8880
   nodeSelector:
     provisioner: gpu
+  annotations:
+    karpenter.sh/provisioner-name: dev-ds-translator-gpu    
 
 
 nameOverride: ""

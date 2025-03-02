@@ -5,10 +5,6 @@ metadata:
 spec:
   labels:
     provisioner: {{ .Values.provisionerGpu.provisioner | default "gpu" }}
-  limits:
-    resources:
-      cpu: {{ .Values.provisionerGpu.limits.cpu | default "1000" }}
-      memory: {{ .Values.provisionerGpu.limits.memory | default "2048Mi" }}
   provider:
     instanceProfile: {{ .Values.provisionerGpu.provider.instanceProfile | quote }}
     securityGroupSelector:

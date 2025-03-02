@@ -5,10 +5,6 @@ metadata:
 spec:
   labels:
     provisioner: {{ .Values.provisionerFrontend.provisioner | default "frontend" }}
-  limits:
-    resources:
-      cpu: {{ .Values.provisionerFrontend.limits.cpu | default "1000" }}
-      memory: {{ .Values.provisionerFrontend.limits.memory | default "2048Mi" }}
   provider:
     instanceProfile: {{ .Values.provisionerFrontend.provider.instanceProfile | quote }}
     securityGroupSelector:

@@ -13,6 +13,8 @@ spec:
     metadata:
       labels:
         app: {{ include "ds-translator.name" . }}-frontend
+      annotations:
+        {{- toYaml .Values.frontend.annotations | nindent 8 }}          
     spec:
       nodeSelector:
         {{- toYaml .Values.frontend.nodeSelector | nindent 8 }}       

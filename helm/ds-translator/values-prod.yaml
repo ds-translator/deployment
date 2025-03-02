@@ -15,6 +15,6 @@ frontendProvisioner:
   provider:
     instanceProfile: "dst-prod-karpenter-profile-instance-role"
   requirements:
-    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]
+    instanceTypes: ["t2.medium", "t2.large", "t3.medium"]
 
 clusterName: "dst-prod-cluster"

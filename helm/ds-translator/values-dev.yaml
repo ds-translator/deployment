@@ -24,10 +24,11 @@ provisionerFrontend:
   limits:
     cpu: "1000"
     memory: "2048Mi"
+    pods: 30
   provider:
-    instanceProfile: "dst-dev-karpenter-profile-instance-role"
+    instanceProfile: "dst-dev-karpenter-controller-instance-profile"
   requirements:
-    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]
+    instanceTypes: ["t2.medium", "t2.large", "t3.medium"]
 
 provisionerGpu:
   labels:
@@ -35,9 +36,11 @@ provisionerGpu:
   limits:
     cpu: "1000"
     memory: "2048Mi"
+    pods: 30
   provider:
-    instanceProfile: "dst-dev-karpenter-profile-instance-role"
+    instanceProfile: "dst-dev-karpenter-controller-instance-profile"
   requirements:
-    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]
+    instanceTypes: ["t2.medium", "t2.large", "t3.medium"]
+
 
 clusterName: "dst-dev-cluster"

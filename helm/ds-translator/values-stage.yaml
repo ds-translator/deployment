@@ -25,4 +25,15 @@ frontendProvisioner:
   requirements:
     instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]    
 
+provisionerGpu:
+  labels:
+    provisioner: "gpu"
+  limits:
+    cpu: "1000"
+    memory: "2048Mi"
+  provider:
+    instanceProfile: "dst-dev-karpenter-profile-instance-role"
+  requirements:
+    instanceTypes: ["t2.micro", "t3.micro", "t2.medium", "t2.large"]
+
 clusterName: "dst-stage-cluster"
