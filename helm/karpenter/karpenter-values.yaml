@@ -1,0 +1,8 @@
+controller:
+  tolerations:
+    - key: "dedicated"
+      operator: "Equal"
+      value: "karpenter"
+      effect: "NoSchedule"
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-karpenter

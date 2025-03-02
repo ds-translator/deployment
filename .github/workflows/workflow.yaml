@@ -58,7 +58,7 @@ jobs:
             --set "settings.clusterName=dst-dev-cluster" \
             --set "settings.cluster-endpoint=$cluster_endpoint" \
             --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::${{ SECRETS.AWS_ACCOUNT_ID }}:role/dst-dev-karpenter-controller-role \
-            --wait
+            -f ./helm/karpenter/karpenter-values.yaml
 
           kubectl taint nodes -l NodeGroup=karpenter karpenter=true:NoSchedule
 
