@@ -91,7 +91,7 @@ jobs:
         id: get-hostname
         run: |
           echo ">> Waiting for public DNS endpoint"
-          RETRIES=10
+          RETRIES=20
           attempt=1
 
           while [ $attempt -le $RETRIES ]; do
@@ -353,7 +353,7 @@ jobs:
         id: get-hostname
         run: |
           echo ">> Waiting for public DNS endpoint"
-          RETRIES=10
+          RETRIES=20
           attempt=1
 
           while [ $attempt -le $RETRIES ]; do
