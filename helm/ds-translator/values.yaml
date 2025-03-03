@@ -7,6 +7,19 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
 
+inference:
+  replicaCount: 1
+  image: 
+    repository: ollama/ollama
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 11434
+  nodeSelector:
+    gpu: "true"
+    role: "ai"
+
 frontend:
   replicaCount: 1
   image:

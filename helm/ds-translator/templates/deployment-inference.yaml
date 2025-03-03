@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ds-translator.fullname" . }}-inference
+  labels:
+    app: {{ include "ds-translator.name" . }}-inference
+spec:
+  replicas: {{ .Values.inference.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "ds-translator.name" . }}-inference
+      component: inference
+  template:
+    metadata:
+      labels:
+        app: {{ include "ds-translator.name" . }}-inference
+        component: inference
+    spec:
+      nodeSelector:
+        {{- toYaml .Values.inference.nodeSelector | nindent 8 }}    
+      containers:
+        - name: inference
+          image: "{{ .Values.inference.image.repository }}:{{ .Values.inference.image.tag }}"
+          imagePullPolicy: {{ .Values.inference.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.inference.service.port }}
+           
+            {{- with .Values.inference.env }}
+            {{- if kindIs "map" . }}
+            {{- range $key, $value := . }}
+            - name: {{ $key }}
+              value: "{{ $value }}"
+            {{- end }}
+            {{- else if kindIs "slice" . }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- end }}            
