@@ -66,8 +66,10 @@ inference:
     type: ClusterIP
     port: 11434
   nodeSelector:
-    gpu: "true"
-    role: "ai"
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+  env: {}
+  persistence:
+    claimName: pvc-s3
 
 nameOverride: ""
 fullnameOverride: ""
