@@ -2,7 +2,7 @@ ingress:
   host: www.dstranslator.cloud
   enabled: true
   annotations:
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:iam::707809188586:server-certificate/dst-zerossl-prod-dstranslator-cloud
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:iam::707809188586:server-certificate/dst-zerossl-dev-dstranslator-cloud
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
