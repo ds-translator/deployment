@@ -335,7 +335,17 @@ jobs:
       - name: Run Integration Tests on Stage
         run: |
           echo ">> Running basic connection test"
-          curl --fail https://stage.dstranslator.cloud || exit 1
+          RETRIES=18
+          COUNT=0
+          until curl --fail https://stage.dstranslator.cloud; do
+            COUNT=$((COUNT+1))
+            if [ $COUNT -ge $RETRIES ]; then
+              echo "DNS not propagated after $RETRIES attempts."
+              exit 1
+            fi
+            echo "Domain not reachable yet. Retrying in 10 seconds... ($COUNT/$RETRIES)"
+            sleep 10
+          done
           echo "Domain and website can be reached"
 
   promote-to-prod:
@@ -452,5 +462,15 @@ jobs:
       - name: Run Integration Tests on Production
         run: |
           echo ">> Running basic connection test"
-          curl --fail https://www.dstranslator.cloud || exit 1
+          RETRIES=18
+          COUNT=0
+          until curl --fail https://www.dstranslator.cloud; do
+            COUNT=$((COUNT+1))
+            if [ $COUNT -ge $RETRIES ]; then
+              echo "DNS not propagated after $RETRIES attempts."
+              exit 1
+            fi
+            echo "Domain not reachable yet. Retrying in 10 seconds... ($COUNT/$RETRIES)"
+            sleep 10
+          done
           echo "Domain and website can be reached"
