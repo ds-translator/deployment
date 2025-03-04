@@ -96,19 +96,19 @@ jobs:
 
       - name: Create storage for S3
         run: |
-          kubectl apply -f ./manifests/s3/storageclass.yaml
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml
           
-          if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
-            kubectl apply -f ./manifests/s3/pv.yaml
-          else
-            echo "PV already exists"
-          fi
+          # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pv.yaml
+          # else
+          #   echo "PV already exists"
+          # fi
 
-          if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
-            kubectl apply -f ./manifests/s3/pvc.yaml
-          else
-            echo "PVC already exists"
-          fi
+          # if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pvc.yaml -n dev
+          # else
+          #   echo "PVC already exists"
+          # fi
 
       - name: Deploy Helm Chart to Dev
         run: |

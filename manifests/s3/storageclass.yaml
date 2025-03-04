@@ -4,4 +4,6 @@ metadata:
   name: s3-csi
 provisioner: s3.csi.aws.com
 parameters:
+  bucket: dst-dev-test-bucket
+  region: us-east-1  
   type: standard
