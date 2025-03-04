@@ -96,7 +96,7 @@ jobs:
 
       - name: Create storage for S3
         run: |
-          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml -n dev
           
           # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
           #   kubectl apply -f ./manifests/s3/pv.yaml
