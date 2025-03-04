@@ -368,7 +368,7 @@ jobs:
           aws-region: ${{ SECRETS.AWS_REGION }}
 
       - name: Update kubeconfig for Production
-        run: aws eks update-kubeconfig --region ${{ SECRETS.AWS_REGION }} --name dst-stage-cluster
+        run: aws eks update-kubeconfig --region ${{ SECRETS.AWS_REGION }} --name dst-prod-cluster
 
       - name: Set up Helm
         uses: azure/setup-helm@v4.3.0
