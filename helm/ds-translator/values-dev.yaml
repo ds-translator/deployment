@@ -7,10 +7,21 @@ ingress:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
 
-backend:
-backend:
+
+
+frontend:
+  replicaCount: 1
   image:
-    pullPolicy: Always
+    repository: ghcr.io/ds-translator/frontend-ui
+    tag: v0.2.0
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+
+backend:
   env:
     STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
     TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
@@ -18,3 +29,51 @@ backend:
     TEXT_TO_SPEECH_ENGINE: "kokoro"
     TRANSLATOR_ENGINE: "deepl"
     WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ds-translator/backend-server
+    tag: v0.4.0
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8000
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
+  env: {}
+
+stt:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/speaches-ai/speaches
+    tag: 0.7-cpu
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+
+tts:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/remsky/kokoro-fastapi-cpu
+    tag: v0.2.2
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8880
+  nodeSelector:
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
+
+inference:
+  replicaCount: 1
+  image: 
+    repository: ollama/ollama
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 11434
+  nodeSelector:
+    gpu: "true"
+    role: "ai"
