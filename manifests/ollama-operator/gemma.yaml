@@ -1,0 +1,17 @@
+apiVersion: ollama.ayaka.io/v1
+kind: Model
+metadata:
+  name: gemma
+spec:
+  # Scale the model to 2 replicas
+  replicas: 2
+  # Use the model image `phi`
+  image: phi
+  imagePullPolicy: IfNotPresent
+  storageClassName: s3-csi
+  # If you have your own PersistentVolumeClaim created
+  persistentVolumeClaim: 
+    claimName: pvc-s3
+  # If you need to specify the access mode for the PersistentVolume
+  persistentVolume:
+    accessMode: ReadWriteOnce

@@ -1,0 +1,82 @@
+# image:
+#   repository: ollama/ollama
+#   pullPolicy: IfNotPresent
+#   tag: "0.5.7"
+
+# replicaCount: 1 # Number of replicas, need storge class support of multiple read when pvc enabled and replica > 1
+
+# llm:
+#   models: ["phi4", "deepseek-r1:14b"] # List of models to be pre-loaded (refer https://ollama.com/library for the supported models)
+
+persistentVolume: # If true, use a Persistent Volume Claim, If false, use emptyDir
+  enabled: true
+  storageClass: "s3-csi"
+  accessModes:
+    - ReadWriteOnce
+  size: 100Gi
+  claimName: "pvc-s3" # set to non-empty value to use an existing PVC
+
+# imagePullSecrets: []
+# nameOverride: ""
+# fullnameOverride: ""
+# podAnnotations: {}
+# podLabels: {}
+
+# podSecurityContext:
+#   {}
+  # fsGroup: 2000
+
+# securityContext:
+#   {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# service:
+#   type: ClusterIP
+#   port: 11434
+
+resources:
+  limits:
+#     cpu: 4
+#     memory: 4Gi
+    nvidia.com/gpu: "0"
+#     # amd.com/gpu: "1"
+  requests:
+  #   cpu: 100m
+#     memory: 128Mi
+    nvidia.com/gpu: "0"
+    # amd.com/gpu: "1"
+
+# livenessProbe:
+#   failureThreshold: 3
+#   periodSeconds: 30
+#   timeoutSeconds: 15
+#   httpGet:
+#     path: /
+#     port: http
+# readinessProbe:
+#   failureThreshold: 3
+#   periodSeconds: 30
+#   timeoutSeconds: 15
+#   httpGet:
+#     path: /
+#     port: http
+
+# autoscaling:
+#   enabled: false
+#   minReplicas: 1
+#   maxReplicas: 100
+#   targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# nodeSelector: {}
+
+# tolerations:
+#   - key: kubernetes.azure.com/scalesetpriority
+#     operator: Exists
+
+# affinity: {}

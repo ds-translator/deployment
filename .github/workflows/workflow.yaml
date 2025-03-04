@@ -99,6 +99,14 @@ jobs:
           
           if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
             kubectl apply -f ./manifests/s3/pv.yaml
+          else
+            echo "PV already exists"
+          fi
+
+          if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+            kubectl apply -f ./manifests/s3/pvc.yaml
+          else
+            echo "PVC already exists"
           fi
 
       - name: Deploy Helm Chart to Dev

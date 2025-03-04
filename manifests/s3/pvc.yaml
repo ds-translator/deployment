@@ -8,4 +8,4 @@ spec:
   storageClassName: s3-csi
   resources:
     requests:
-      storage: 1005Gi
+      storage: 100Gi

@@ -1,15 +1,17 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-s3
+  name: pv-s3-new
 spec:
   capacity:
     storage: 100Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   storageClassName: s3-csi
   csi:
     driver: s3.csi.aws.com
     volumeHandle: dst-dev-test-bucket
+    volumeAttributes:
+      bucket: dst-dev-test-bucket
