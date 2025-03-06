@@ -41,7 +41,7 @@ backend:
     port: 8000
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
-  env: {}
+
 
 stt:
   replicaCount: 1
