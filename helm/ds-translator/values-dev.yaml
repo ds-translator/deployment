@@ -13,7 +13,7 @@ frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/ds-translator/frontend-ui
-    tag: v0.4.1
+    tag: v0.4.5
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -41,7 +41,6 @@ backend:
     port: 8000
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-frontend
-
 
 stt:
   replicaCount: 1
@@ -77,5 +76,4 @@ inference:
     type: ClusterIP
     port: 11434
   nodeSelector:
-    gpu: "true"
-    role: "ai"
+    eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
