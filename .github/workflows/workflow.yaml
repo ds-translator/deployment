@@ -75,6 +75,25 @@ jobs:
       #     kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.12/nvidia-device-plugin.yml
       #     kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
 
+
+
+      - name: Install EBS CSI Driver
+        run: |
+          helm repo add aws-mountpoint-ebs-csi-driver public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.40.0
+          helm repo update
+          helm upgrade --install aws-mountpoint-ebs-csi-driver \
+            --namespace kube-system \
+            aws-mountpoint-ebs-csi-driver/aws-mountpoint-ebs-csi-driver
+
+            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-ebs-csi-driver -n kube-system --timeout=120s
+            if [ $? -eq 0 ]; then
+              echo "aws-mountpoint-ebs-csi-driver pods are running"
+            else
+              echo "aws-mountpoint-ebs-csi-driver pods are not running"
+              exit 1
+            fi
+
+
       - name: Install S3 CSI Driver
         run: |
           helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
@@ -265,6 +284,42 @@ jobs:
       #       --set clusterName=dst-stage-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
 
+      - name: Install S3 CSI Driver
+        run: |
+          helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
+          helm repo update
+          helm upgrade --install aws-mountpoint-s3-csi-driver \
+            --namespace kube-system \
+            aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver
+
+            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-s3-csi-driver -n kube-system --timeout=120s
+            if [ $? -eq 0 ]; then
+              echo "aws-mountpoint-s3-csi-driver pods are running"
+            else
+              echo "aws-mountpoint-s3-csi-driver pods are not running"
+              exit 1
+            fi
+
+      - name: Attach role to S3 CSI service account
+        run: kubectl apply -f ./manifests/s3/s3-csi-driver-sa.yaml
+
+      - name: Create storage for S3
+        run: |
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml -n stage
+          
+          # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pv.yaml
+          # else
+          #   echo "PV already exists"
+          # fi
+
+          # if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pvc.yaml -n dev
+          # else
+          #   echo "PVC already exists"
+          # fi
+
+
       - name: Deploy Helm Chart to Stage
         run: |
           helm upgrade --install stage-ds-translator ds-translator-*.tgz \
@@ -391,6 +446,43 @@ jobs:
       #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
       #       --set clusterName=dst-production-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
+
+      - name: Install S3 CSI Driver
+        run: |
+          helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
+          helm repo update
+          helm upgrade --install aws-mountpoint-s3-csi-driver \
+            --namespace kube-system \
+            aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver
+
+            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-s3-csi-driver -n kube-system --timeout=120s
+            if [ $? -eq 0 ]; then
+              echo "aws-mountpoint-s3-csi-driver pods are running"
+            else
+              echo "aws-mountpoint-s3-csi-driver pods are not running"
+              exit 1
+            fi
+
+      - name: Attach role to S3 CSI service account
+        run: kubectl apply -f ./manifests/s3/s3-csi-driver-sa.yaml
+
+      - name: Create storage for S3
+        run: |
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml -n prod
+          
+          # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pv.yaml
+          # else
+          #   echo "PV already exists"
+          # fi
+
+          # if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pvc.yaml -n dev
+          # else
+          #   echo "PVC already exists"
+          # fi
+
+
 
       - name: Deploy Helm Chart to Production
         run: |
