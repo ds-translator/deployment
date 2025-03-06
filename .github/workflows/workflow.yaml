@@ -77,9 +77,10 @@ jobs:
 
 
 
-      - name: Install EBS CSI Driver
+      - name: Install EBS CSI Driver and create SC, PVC
         run: |
           kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n dev apply -f manifests/ebs/ebs-pvc-init.yaml
 
       - name: Install S3 CSI Driver
         run: |
