@@ -274,6 +274,11 @@ jobs:
       #       --set clusterName=dst-stage-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
 
+      - name: Install EBS CSI Driver and create SC, PVC
+        run: |
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n stage apply -f manifests/ebs/ebs-pvc-init.yaml
+
       - name: Install S3 CSI Driver
         run: |
           helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
@@ -436,6 +441,11 @@ jobs:
       #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
       #       --set clusterName=dst-production-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
+
+      - name: Install EBS CSI Driver and create SC, PVC
+        run: |
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n prod apply -f manifests/ebs/ebs-pvc-init.yaml
 
       - name: Install S3 CSI Driver
         run: |
