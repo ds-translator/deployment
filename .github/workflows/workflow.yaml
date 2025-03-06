@@ -79,19 +79,7 @@ jobs:
 
       - name: Install EBS CSI Driver
         run: |
-          helm repo add aws-mountpoint-ebs-csi-driver public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver:v1.40.0
-          helm repo update
-          helm upgrade --install aws-mountpoint-ebs-csi-driver \
-            --namespace kube-system \
-            aws-mountpoint-ebs-csi-driver/aws-mountpoint-ebs-csi-driver
-
-            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-ebs-csi-driver -n kube-system --timeout=120s
-            if [ $? -eq 0 ]; then
-              echo "aws-mountpoint-ebs-csi-driver pods are running"
-            else
-              echo "aws-mountpoint-ebs-csi-driver pods are not running"
-              exit 1
-            fi
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
 
 
       - name: Install S3 CSI Driver
