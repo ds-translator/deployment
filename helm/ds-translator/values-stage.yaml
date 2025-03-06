@@ -21,9 +21,9 @@ frontend:
 
 backend:
   env:
-    STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
-    TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
-    OPENAI_API_URL: "http://dev-ds-translator-ds-translator-inference/v1"
+    STT_API_URL: "http://stage-ds-translator-ds-translator-stt/v1"
+    TTS_API_URL: "http://stage-ds-translator-ds-translator-tts/v1"
+    OPENAI_API_URL: "http://stage-ds-translator-ds-translator-inference/v1"
     SPEECH_TO_TEXT_ENGINE: "whisper_stt"
     TEXT_TO_SPEECH_ENGINE: "kokoro"
     TRANSLATOR_ENGINE: "cluster"
