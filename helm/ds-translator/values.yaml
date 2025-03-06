@@ -67,7 +67,6 @@ inference:
     port: 11434
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
-  env: {}
   persistence:
     claimName: ebs-claim
 
