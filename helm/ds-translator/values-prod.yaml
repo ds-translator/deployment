@@ -11,7 +11,7 @@ frontend:
   replicaCount: 1
   image:
     repository: ghcr.io/ds-translator/frontend-ui
-    tag: v0.2.0
+    tag: v0.4.6
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -21,23 +21,25 @@ frontend:
 
 backend:
   env:
-    STT_API_URL: "http://prod-ds-translator-ds-translator-stt/v1"
-    TTS_API_URL: "http://prod-ds-translator-ds-translator-tts/v1"
+    STT_API_URL: "http://dev-ds-translator-ds-translator-stt/v1"
+    TTS_API_URL: "http://dev-ds-translator-ds-translator-tts/v1"
+    OPENAI_API_URL: "http://dev-ds-translator-ds-translator-inference/v1"
     SPEECH_TO_TEXT_ENGINE: "whisper_stt"
     TEXT_TO_SPEECH_ENGINE: "kokoro"
-    TRANSLATOR_ENGINE: "deepl"
+    TRANSLATOR_ENGINE: "cluster"
     WHISPER_MODEL: "jkawamoto/whisper-tiny-ct2"
+    INFERENCE_MODEL: "gemma:2b"
   replicaCount: 1
   image:
     repository: ghcr.io/ds-translator/backend-server
-    tag: v0.4.0
+    tag: v0.5.0
     pullPolicy: Always
   service:
     type: ClusterIP
     port: 8000
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-prod-eks-ng-frontend
-  env: {}
+
 
 stt:
   replicaCount: 1
