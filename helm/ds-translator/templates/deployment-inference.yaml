@@ -24,9 +24,9 @@ spec:
           imagePullPolicy: {{ .Values.inference.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.inference.service.port }}
-          # volumeMounts:
-          #   - name: ollama-pvc
-          #     mountPath: /root/.ollama           
+          volumeMounts:
+            - name: ollama-pvc
+              mountPath: /root/.ollama           
             {{- with .Values.inference.env }}
             {{- if kindIs "map" . }}
             {{- range $key, $value := . }}
@@ -37,7 +37,7 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
             {{- end }}            
-      # volumes:
-      #   - name: ollama-pvc
-      #     persistentVolumeClaim:
-      #       claimName: {{ .Values.inference.persistence.claimName }}
+      volumes:
+        - name: ollama-pvc
+          persistentVolumeClaim:
+            claimName: {{ .Values.inference.persistence.claimName }}

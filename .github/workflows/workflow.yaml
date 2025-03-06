@@ -75,6 +75,13 @@ jobs:
       #     kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.12/nvidia-device-plugin.yml
       #     kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
 
+
+
+      - name: Install EBS CSI Driver and create SC, PVC
+        run: |
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n dev apply -f manifests/ebs/ebs-pvc-init.yaml
+
       - name: Install S3 CSI Driver
         run: |
           helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
@@ -90,6 +97,16 @@ jobs:
               echo "aws-mountpoint-s3-csi-driver pods are not running"
               exit 1
             fi
+
+
+
+      - name: Deploy Helm Chart to Dev
+        run: |
+          helm upgrade --install dev-ds-translator ./helm/ds-translator \
+            --namespace dev \
+            --create-namespace \
+            --values ./helm/ds-translator/values-dev.yaml \
+      # --set image.tag=${{ env.IMAGE_TAG }}
 
       - name: Attach role to S3 CSI service account
         run: kubectl apply -f ./manifests/s3/s3-csi-driver-sa.yaml
@@ -109,14 +126,6 @@ jobs:
           # else
           #   echo "PVC already exists"
           # fi
-
-      - name: Deploy Helm Chart to Dev
-        run: |
-          helm upgrade --install dev-ds-translator ./helm/ds-translator \
-            --namespace dev \
-            --create-namespace \
-            --values ./helm/ds-translator/values-dev.yaml \
-      # --set image.tag=${{ env.IMAGE_TAG }}
 
       - name: Create or Update API Key Secret in Dev
         run: |
@@ -265,6 +274,47 @@ jobs:
       #       --set clusterName=dst-stage-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
 
+      - name: Install EBS CSI Driver and create SC, PVC
+        run: |
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n stage apply -f manifests/ebs/ebs-pvc-init.yaml
+
+      - name: Install S3 CSI Driver
+        run: |
+          helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
+          helm repo update
+          helm upgrade --install aws-mountpoint-s3-csi-driver \
+            --namespace kube-system \
+            aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver
+
+            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-s3-csi-driver -n kube-system --timeout=120s
+            if [ $? -eq 0 ]; then
+              echo "aws-mountpoint-s3-csi-driver pods are running"
+            else
+              echo "aws-mountpoint-s3-csi-driver pods are not running"
+              exit 1
+            fi
+
+      - name: Attach role to S3 CSI service account
+        run: kubectl apply -f ./manifests/s3/s3-csi-driver-sa.yaml
+
+      - name: Create storage for S3
+        run: |
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml -n stage
+          
+          # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pv.yaml
+          # else
+          #   echo "PV already exists"
+          # fi
+
+          # if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pvc.yaml -n dev
+          # else
+          #   echo "PVC already exists"
+          # fi
+
+
       - name: Deploy Helm Chart to Stage
         run: |
           helm upgrade --install stage-ds-translator ds-translator-*.tgz \
@@ -391,6 +441,48 @@ jobs:
       #       amazon-cloudwatch aws-observability/amazon-cloudwatch-observability \ 
       #       --set clusterName=dst-production-cluster \
       #       --set region=${{ SECRETS.AWS_REGION }}
+
+      - name: Install EBS CSI Driver and create SC, PVC
+        run: |
+          kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=release-1.40"
+          kubectl -n prod apply -f manifests/ebs/ebs-pvc-init.yaml
+
+      - name: Install S3 CSI Driver
+        run: |
+          helm repo add aws-mountpoint-s3-csi-driver https://awslabs.github.io/mountpoint-s3-csi-driver
+          helm repo update
+          helm upgrade --install aws-mountpoint-s3-csi-driver \
+            --namespace kube-system \
+            aws-mountpoint-s3-csi-driver/aws-mountpoint-s3-csi-driver
+
+            kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=aws-mountpoint-s3-csi-driver -n kube-system --timeout=120s
+            if [ $? -eq 0 ]; then
+              echo "aws-mountpoint-s3-csi-driver pods are running"
+            else
+              echo "aws-mountpoint-s3-csi-driver pods are not running"
+              exit 1
+            fi
+
+      - name: Attach role to S3 CSI service account
+        run: kubectl apply -f ./manifests/s3/s3-csi-driver-sa.yaml
+
+      - name: Create storage for S3
+        run: |
+          kubectl apply -f ./manifests/s3/pv-pvc-init.yaml -n prod
+          
+          # if ! kubectl get pv pv-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pv.yaml
+          # else
+          #   echo "PV already exists"
+          # fi
+
+          # if ! kubectl get pvc pvc-s3 >/dev/null 2>&1; then
+          #   kubectl apply -f ./manifests/s3/pvc.yaml -n dev
+          # else
+          #   echo "PVC already exists"
+          # fi
+
+
 
       - name: Deploy Helm Chart to Production
         run: |

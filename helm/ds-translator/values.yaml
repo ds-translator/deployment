@@ -67,9 +67,8 @@ inference:
     port: 11434
   nodeSelector:
     eks.amazonaws.com/nodegroup: dst-dev-eks-ng-gpu
-  env: {}
   persistence:
-    claimName: model-s3-pvc
+    claimName: ebs-claim
 
 nameOverride: ""
 fullnameOverride: ""
