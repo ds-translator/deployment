@@ -204,7 +204,7 @@ jobs:
           echo "Domain and website can be reached"
 
   package-artifact:
-    if: github.ref == 'refs/heads/release'  
+    if: github.ref == 'refs/heads/develop'  
     name: Package Helm Chart Artifact
     # needs: deploy-dev
     runs-on: ubuntu-latest
