@@ -206,7 +206,7 @@ jobs:
   package-artifact:
     if: github.ref == 'refs/heads/develop'  
     name: Package Helm Chart Artifact
-    # needs: deploy-dev
+    needs: deploy-dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
